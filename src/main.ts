@@ -1,6 +1,41 @@
 let puntuacion = 0;
 let referenciaAlDivPuntuacion: HTMLElement | null;
 
+const dameUrlCarta = (carta: number) => {
+  switch (carta) {
+    case 1:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg";
+    case 2:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/2_dos-copas.jpg";
+    case 3:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/3_tres-copas.jpg";
+    case 4:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/4_cuatro-copas.jpg";
+    case 5:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/5_cinco-copas.jpg";
+    case 6:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg";
+    case 7:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg";
+    case 8:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/10_sota-copas.jpg";
+    case 9:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/11_caballo-copas.jpg";
+    case 10:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/12_rey-copas.jpg";
+    default:
+      return "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
+  }
+};
+
+const pintarUrlCarta = (urlCarta: string) => {
+  const elementoImagen = document.getElementById("carta");
+
+  if (elementoImagen && elementoImagen instanceof HTMLImageElement) {
+    elementoImagen.src = urlCarta;
+  }
+};
+
 const cartas: Array<string> = [
   "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg",
 
@@ -49,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (botonDameCarta) {
     botonDameCarta.addEventListener("click", dameCarta);
   }
+
   const botonMePlanto = document.getElementById("plantarse");
   if (botonMePlanto) {
     botonMePlanto.addEventListener("click", mePlanto);
@@ -62,11 +98,59 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+const dameNumeroAleatorio = () => {
+  return Math.floor(Math.random() * 10);
+};
+
+const dameNumeroCarta = (numeroAleatorio: number) => {
+  if (numeroAleatorio > 7) {
+    return numeroAleatorio + 2;
+  }
+
+  return numeroAleatorio;
+};
+
+const obtenerPuntosCarta = (carta: number) => {
+  if (carta > 7) {
+    return 0.5;
+  }
+
+  return carta;
+};
+
+const sumarPuntos = (puntos: number) => {
+  return (puntuacion += puntos);
+};
+
+const actualizarPuntuacion = (puntosActuales: number) => {
+  puntuacion = puntosActuales;
+};
+
+const comprobarPartida = () => {
+  if (puntuacion === 7.5) {
+    console.log("he ganado la partida");
+  }
+
+  if (puntuacion > 7.5) {
+    console.log("he perdido la partida");
+  }
+};
+
 const dameCarta = () => {
-  const valoresCartas = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12];
-  const lenghtArray = valoresCartas.length;
-  const indexSelecionado = Math.floor(Math.random() * lenghtArray);
-  muestraCarta(valoresCartas[indexSelecionado]);
+  const numeroAleatorio = dameNumeroAleatorio();
+  const carta = dameNumeroCarta(numeroAleatorio);
+  const urlCarta = dameUrlCarta(carta);
+  pintarUrlCarta(urlCarta);
+  const puntosCarta = obtenerPuntosCarta(carta);
+  const puntosSumados = sumarPuntos(puntosCarta);
+  actualizarPuntuacion(puntosSumados);
+  muestraPuntuacion();
+  comprobarPartida();
+
+  // const valoresCartas = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12];
+  // const lenghtArray = valoresCartas.length;
+  // const indexSelecionado = Math.floor(Math.random() * lenghtArray);
+  // muestraCarta(valoresCartas[indexSelecionado]);
 };
 
 const muestraCarta = (numeroDeCarta: number) => {
